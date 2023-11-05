@@ -15,7 +15,7 @@ class AGP_ASSESSMENT4GROUP_API AMultiPlayerGameMode : public AGameMode
 	GENERATED_BODY()
 
 public:
-	void AMultiplayerGameMode();
+	AMultiPlayerGameMode();
 
 protected:
 

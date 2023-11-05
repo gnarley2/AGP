@@ -227,10 +227,11 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()                     
           {
           RotationCount = 0;
           EnemyHasLOS=true;
-          LastSeenLocation = PlayerCharacter->GetActorLocation();
-          EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
+         LastSeenLocation = PlayerCharacter->GetActorLocation();
+ 
+         //EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance,false);
 
-          DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
+         DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
           const float Distance = FVector::Distance(StartLocation, EndLocation);
           if(Distance<150.0f&&Distance>140.0f)                                                            //Threshold for distance to player for enemy to jump
              {

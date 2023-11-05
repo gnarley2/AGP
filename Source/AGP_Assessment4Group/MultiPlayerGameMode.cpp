@@ -8,8 +8,8 @@
 #include "EnemyCharacter.h"
 
 
-void AMultiPlayerGameMode::AMultiplayerGameMode()
+AMultiPlayerGameMode::AMultiPlayerGameMode()
 {
 	// Set the default pawn class for this game mode.
-	DefaultPawnClass = AAGP_Assessment4GroupCharacter::StaticClass(); // Use AEnemyCharacter as the default pawn class
+	DefaultPawnClass = AEnemyCharacter::StaticClass(); // Use AEnemyCharacter as the default pawn class
 }
