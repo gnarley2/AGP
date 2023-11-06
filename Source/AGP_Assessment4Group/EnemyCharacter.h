@@ -49,6 +49,7 @@ public:
     FHitResult HitResult;
     UPROPERTY(Replicated)
     bool bHit;
+	
     UPROPERTY(Replicated)
     class AEnemyAIController* EnemyAIController;
     
@@ -91,6 +92,8 @@ public:
     
     UFUNCTION()                                                                                  //Generate a different colour for debug for each enemy 
     static FColor GenerateRandomColor();
+
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const override;
 
 
 };

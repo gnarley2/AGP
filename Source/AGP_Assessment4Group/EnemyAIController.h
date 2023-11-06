@@ -26,8 +26,8 @@ public:
 
 	bool RandomPatrolComplete = false;
 
-	UPROPERTY()
-	class AEnemyAIController* EnemyAIController;
+	//UPROPERTY()
+	//class AEnemyAIController* EnemyAIController;
 	UPROPERTY()
 	class AAGP_Assessment4GroupCharacter* PlayerCharacter;
        
