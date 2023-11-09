@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraComponent.h"
 #include "EnemyAIController.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
@@ -95,5 +96,11 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const override;
 
+protected:
+    UPROPERTY(EditDefaultsOnly, Category="Particle System")
+    UNiagaraSystem* PlayerHitParticles;
 
+public:
+    UFUNCTION()
+    void SpawnPlayerHitParticles(const FVector& SpawnLocation);
 };

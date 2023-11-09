@@ -2,7 +2,7 @@
 
 
 #include "EnemyCharacter.h"
-
+#include "NiagaraFunctionLibrary.h"
 #include "EnemyAIController.h"
 #include "AGP_Assessment4GroupCharacter.h"
 #include "Components/SphereComponent.h"
@@ -238,6 +238,9 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 					GetCharacterMovement()->JumpZVelocity = RandomZVelocity;
 					Jump();
 					}
+
+				//blood  
+				SpawnPlayerHitParticles(EndLocation);
 			}
 	}
 	else
@@ -254,6 +257,9 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 		//	LastSeenLocation = PlayerCharacter->GetActorLocation();
 		//	EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
 			DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
+
+			//blood particle 
+			SpawnPlayerHitParticles(EndLocation);
 			}
 	}
 }
@@ -290,6 +296,11 @@ void AEnemyCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 	DOREPLIFETIME(AEnemyCharacter, OverlapDetected);
 	DOREPLIFETIME(AEnemyCharacter, EnemyAIController);
 	// Add other variables you want to replicate here.
+}
+
+void AEnemyCharacter::SpawnPlayerHitParticles(const FVector& SpawnLocation)
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), PlayerHitParticles, SpawnLocation);
 }
 //The Enemy Character can "See" and "Hear" the PlayerCharacter with Line of Sight implemented.
 //

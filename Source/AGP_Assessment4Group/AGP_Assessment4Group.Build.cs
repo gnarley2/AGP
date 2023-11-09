@@ -9,5 +9,7 @@ public class AGP_Assessment4Group : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", "NavigationSystem"  });
+
+		PrivateDependencyModuleNames.AddRange(new string[] { "Niagara"});
 	}
 }
