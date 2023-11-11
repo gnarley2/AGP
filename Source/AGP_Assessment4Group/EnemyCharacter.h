@@ -63,9 +63,6 @@ public:
     
     UPROPERTY(EditAnywhere)
     class AAGP_Assessment4GroupCharacter* PlayerCharacter;
-
-    //UPROPERTY(Replicated)
-    //class AMyProject3Character* PlayerCharacter2;
     
     UPROPERTY(EditAnywhere)
     class USphereComponent* PlayerCollisionDetection;
