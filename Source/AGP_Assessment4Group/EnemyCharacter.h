@@ -55,7 +55,7 @@ public:
     bool bHit;
 
     // Light component
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light")
+    UPROPERTY(Replicated)
     UPointLightComponent* PointLight;
 	
     UPROPERTY(Replicated)
@@ -94,7 +94,7 @@ public:
 
     void OnAIMoveCompleted(struct FAIRequestID RequestID, const struct FPathFollowingResult& Result);
     
-    UFUNCTION(Client, Reliable)                                                                                  //Function to control rotating behaviour when PlayerCharacter is not Sensed
+    UFUNCTION(NetMulticast, Reliable)                                                                                  //Function to control rotating behaviour when PlayerCharacter is not Sensed
     void RotateSearch();
     
     UFUNCTION(NetMulticast, Reliable)                                                                                //Function for Line of Sight Mechanic; Tells the EnemyCharacter whether to chase Player or Search for Player

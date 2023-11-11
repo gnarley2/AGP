@@ -30,6 +30,7 @@ AEnemyCharacter::AEnemyCharacter()
 	PointLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
 	PointLight->SetupAttachment(RootComponent);
 	PointLight->Intensity = 1000.0f;
+	PointLight->SetIsReplicated(true);
 
 	
 }
@@ -183,6 +184,7 @@ void AEnemyCharacter::RotateSearch_Implementation()																						//This 
 	GetCharacterMovement()->MaxWalkSpeed =250;
 if(HasAuthority())
 {
+	PointLight->SetLightColor(FLinearColor(0.0f, 1.0f, 0.0f));
 	if (RotationState == ERotationState::Idle)
 	{
 		const FVector CurrentVelocity = GetMovementComponent()->Velocity;
@@ -214,7 +216,7 @@ if(HasAuthority())
 						RotationState = ERotationState::Idle;
 						CurrentStep = 0;
 						GetWorldTimerManager().ClearTimer(RotateTimerHandle);
-					
+					//	PointLight->SetLightColor(FLinearColor(0.0f, 1.0f, 0.0f));
 						if (RotationCount >= 2 )
 						{
 
@@ -227,12 +229,18 @@ if(HasAuthority())
 							RotationCount++;
 
 						}
+
 					}
+			
 				});
 			GetWorldTimerManager().ClearTimer(RotateTimerHandle);
 			GetWorldTimerManager().SetTimer(RotateTimerHandle, TimerCallback, UpdateRate, true, 0.1f);
 			}
 	}
+}
+else
+{
+	PointLight->SetLightColor(FLinearColor(0.0f, 1.0f, 0.0f));
 }
 }
 
@@ -270,22 +278,20 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 				Jump();
 				}
 
-				//blood  
-				//SpawnPlayerHitParticles(EndLocation);
+
 			}
 	}
 	else
 	{
 		bHit = GetWorld()->LineTraceSingleByChannel(HitResult,StartLocation,EndLocation,ECC_Visibility );
+	
 		if (bHit&&OverlapDetected)																								// The line trace hit something before reaching the player
 			{
 			}
 		if(!bHit&&OverlapDetected)																								// There's a clear line of sight to the player within the sphere
 			{
 			DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
-
-			//blood particle 
-			//SpawnPlayerHitParticles(EndLocation);
+			PointLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f));
 			}
 	}
 }
@@ -321,6 +327,8 @@ void AEnemyCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & O
 	DOREPLIFETIME(AEnemyCharacter, RotationCount);
 	DOREPLIFETIME(AEnemyCharacter, OverlapDetected);
 	DOREPLIFETIME(AEnemyCharacter, EnemyAIController);
+	DOREPLIFETIME(AEnemyCharacter, PointLight);
+	
 	// Add other variables you want to replicate here.
 }
 
