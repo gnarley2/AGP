@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/PointLightComponent.h"
+
 #include "NiagaraComponent.h"
 #include "EnemyAIController.h"
 #include "GameFramework/Character.h"
@@ -51,6 +53,10 @@ public:
     FHitResult HitResult;
     UPROPERTY(Replicated)
     bool bHit;
+
+    // Light component
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light")
+    UPointLightComponent* PointLight;
 	
     UPROPERTY(Replicated)
     class AEnemyAIController* EnemyAIController;
