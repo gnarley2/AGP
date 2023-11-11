@@ -22,6 +22,10 @@ AEnemyCharacter::AEnemyCharacter()
 	PlayerCollisionDetection = CreateDefaultSubobject<USphereComponent>(TEXT("Player Collision Detection"));
 	PlayerCollisionDetection->SetupAttachment(RootComponent);
 
+	
+	BloodSplatterCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Blood Splatter Collision"));
+	BloodSplatterCollision->SetupAttachment(RootComponent);
+	
 }
 
 
@@ -46,7 +50,7 @@ void AEnemyCharacter::BeginPlay()
 		EnemyAIController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AEnemyCharacter::OnAIMoveCompleted);
 	}
 
-	GetCharacterMovement()->MaxWalkSpeed = 300;
+	//GetCharacterMovement()->MaxWalkSpeed = 300;
 	
 	RandomColor = GenerateRandomColor();
 	
@@ -77,7 +81,6 @@ void AEnemyCharacter::OnPlayerDetectedOverlapBegin_Implementation(UPrimitiveComp
 		{
 			PlayerCharacter = OverlappingPlayer;
 			OverlapDetected = true;
-		//	UE_LOG(LogTemp, Warning, TEXT("Overlap Detected"));
 		}
 	}
 	else
@@ -87,7 +90,6 @@ void AEnemyCharacter::OnPlayerDetectedOverlapBegin_Implementation(UPrimitiveComp
 		{
 			PlayerCharacter = OverlappingPlayer;
 			OverlapDetected = true;
-			//	UE_LOG(LogTemp, Warning, TEXT("Overlap Detected"));
 		}
 	}
 
@@ -103,10 +105,8 @@ void AEnemyCharacter::OnPlayerDetectedOverlapEnd_Implementation(UPrimitiveCompon
 			{
 				EnemyHasLOS=false;
 				OverlapDetected = false;
-				//DestinationLocation = LastSeenLocation;																			//gives the enemy "memory" of where player character was last seen and send enemy there.
 				LastSeenLocation.Z -= 90;
 				DrawDebugSphere(GetWorld(),  LastSeenLocation, 10.0f, 8, RandomColor, false, 2.0f);
-			//	UE_LOG(LogTemp, Warning, TEXT("Overlap NOT Detected"));
 			}
 		}
 	}
@@ -117,15 +117,36 @@ void AEnemyCharacter::OnPlayerDetectedOverlapEnd_Implementation(UPrimitiveCompon
 			{
 				EnemyHasLOS=false;
 				OverlapDetected = false;
-				//DestinationLocation = LastSeenLocation;																			//gives the enemy "memory" of where player character was last seen and send enemy there.
 				LastSeenLocation.Z -= 90;
 				DrawDebugSphere(GetWorld(),  LastSeenLocation, 10.0f, 8, RandomColor, false, 2.0f);
-				//	UE_LOG(LogTemp, Warning, TEXT("Overlap NOT Detected"));
 			}
 		}
 	}
 	}
 
+//Blood Splatter on Hit with character and hit radius
+void AEnemyCharacter::NotifyHit_Implementation(UPrimitiveComponent* MyComp, AActor* Other,
+	UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse,
+	const FHitResult& Hit)
+{
+	if(HasAuthority())
+	{
+		if (Other->IsA(AAGP_Assessment4GroupCharacter::StaticClass()))
+		{
+			SpawnPlayerHitParticles(EndLocation);
+			PlayerCharacter->ApplyDamage(0.5);
+		}
+	}
+	else
+	{
+		if (Other->IsA(AAGP_Assessment4GroupCharacter::StaticClass()))
+		{
+			SpawnPlayerHitParticles(EndLocation);
+			PlayerCharacter->ApplyDamage(0.5);
+		}
+	}
+	
+}
 
 void AEnemyCharacter::OnAIMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
@@ -228,19 +249,20 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 			EnemyHasLOS=true;
 			LastSeenLocation = PlayerCharacter->GetActorLocation();
 
-				EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
+			EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
 
-				DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
-				const float Distance = FVector::Distance(StartLocation, EndLocation);
-				if(Distance<150.0f&&Distance>140.0f)																				//Threshold for distance to player for enemy to jump
-					{
-					const float RandomZVelocity = FMath::FRandRange(150.0, 450.0);										//Jump height randomizer, to help feel more varied
-					GetCharacterMovement()->JumpZVelocity = RandomZVelocity;
-					Jump();
-					}
+			DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
+			const float Distance = FVector::Distance(StartLocation, EndLocation);
+
+			if(Distance<150.0f&&Distance>140.0f)																				//Threshold for distance to player for enemy to jump
+				{
+				const float RandomZVelocity = FMath::FRandRange(150.0, 450.0);										//Jump height randomizer, to help feel more varied
+				GetCharacterMovement()->JumpZVelocity = RandomZVelocity;
+				Jump();
+				}
 
 				//blood  
-				SpawnPlayerHitParticles(EndLocation);
+				//SpawnPlayerHitParticles(EndLocation);
 			}
 	}
 	else
@@ -248,18 +270,13 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 		bHit = GetWorld()->LineTraceSingleByChannel(HitResult,StartLocation,EndLocation,ECC_Visibility );
 		if (bHit&&OverlapDetected)																								// The line trace hit something before reaching the player
 			{
-		//	LastSeenLocation = PlayerCharacter->GetActorLocation();
-		//	EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
-			
 			}
 		if(!bHit&&OverlapDetected)																								// There's a clear line of sight to the player within the sphere
 			{
-		//	LastSeenLocation = PlayerCharacter->GetActorLocation();
-		//	EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
 			DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
 
 			//blood particle 
-			SpawnPlayerHitParticles(EndLocation);
+			//SpawnPlayerHitParticles(EndLocation);
 			}
 	}
 }

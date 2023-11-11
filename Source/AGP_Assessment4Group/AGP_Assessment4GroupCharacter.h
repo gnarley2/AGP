@@ -40,7 +40,12 @@ class AAGP_Assessment4GroupCharacter : public ACharacter
 public:
 	AAGP_Assessment4GroupCharacter();
 	
+	UFUNCTION(BlueprintCallable, Category="Health")
+	void ApplyDamage(float DamageAmount);
 
+	UPROPERTY(BlueprintReadWrite, Category = "Health")
+	float Health1 = 100;
+	
 protected:
 
 	/** Called for movement input */

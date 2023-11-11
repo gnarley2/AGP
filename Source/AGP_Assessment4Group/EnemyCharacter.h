@@ -15,6 +15,7 @@ class AGP_ASSESSMENT4GROUP_API AEnemyCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+ 
     // Sets default values for this character's properties
     AEnemyCharacter();
 
@@ -62,6 +63,9 @@ public:
     
     UPROPERTY(EditAnywhere)
     class USphereComponent* PlayerCollisionDetection;
+
+    UPROPERTY(EditAnywhere)
+    class USphereComponent* BloodSplatterCollision;
     
     UPROPERTY(Replicated)
     float StoppingDistance = 2.0f;
@@ -82,6 +86,8 @@ public:
        class AActor* OtherActor, class UPrimitiveComponent* OtherComp,
        int32 OtherBodyIndex);
 
+    UFUNCTION(NetMulticast, Reliable)
+    virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
     void OnAIMoveCompleted(struct FAIRequestID RequestID, const struct FPathFollowingResult& Result);
     

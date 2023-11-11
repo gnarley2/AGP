@@ -51,6 +51,11 @@ AAGP_Assessment4GroupCharacter::AAGP_Assessment4GroupCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+void AAGP_Assessment4GroupCharacter::ApplyDamage(float DamageAmount)
+{
+	Health1 -= DamageAmount;
+}
+
 void AAGP_Assessment4GroupCharacter::BeginPlay()
 {
 	// Call the base class  
