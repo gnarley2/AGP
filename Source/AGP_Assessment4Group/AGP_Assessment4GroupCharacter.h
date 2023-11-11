@@ -39,10 +39,12 @@ class AAGP_Assessment4GroupCharacter : public ACharacter
 
 public:
 	AAGP_Assessment4GroupCharacter();
-	
+
+	//	Function to control the application of damage when collision with enemy occurs
 	UFUNCTION(BlueprintCallable, Category="Health")
 	void ApplyDamage(float DamageAmount);
 
+	//	Player starts with 100 health
 	UPROPERTY(BlueprintReadWrite, Category = "Health")
 	float Health1 = 100;
 	

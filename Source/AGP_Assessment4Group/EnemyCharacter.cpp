@@ -30,8 +30,6 @@ AEnemyCharacter::AEnemyCharacter()
 	PointLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
 	PointLight->SetupAttachment(RootComponent);
 	PointLight->Intensity = 1000.0f;
-	PointLight->SetIsReplicated(true);
-
 	
 }
 
@@ -56,8 +54,6 @@ void AEnemyCharacter::BeginPlay()
 	{
 		EnemyAIController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AEnemyCharacter::OnAIMoveCompleted);
 	}
-
-	//GetCharacterMovement()->MaxWalkSpeed = 300;
 	
 	RandomColor = GenerateRandomColor();
 	
@@ -181,7 +177,8 @@ ERotationState RotationState = ERotationState::Idle;
 void AEnemyCharacter::RotateSearch_Implementation()																						//This function handles the rotation interpolation and either calls itself again or passes to RandomPatrol()
 {
 	PointLight->SetLightColor(FLinearColor(0.0f, 1.0f, 0.0f));
-	GetCharacterMovement()->MaxWalkSpeed =250;
+	GetCharacterMovement()->MaxWalkSpeed =300;
+	
 if(HasAuthority())
 {
 	PointLight->SetLightColor(FLinearColor(0.0f, 1.0f, 0.0f));
@@ -216,7 +213,7 @@ if(HasAuthority())
 						RotationState = ERotationState::Idle;
 						CurrentStep = 0;
 						GetWorldTimerManager().ClearTimer(RotateTimerHandle);
-					//	PointLight->SetLightColor(FLinearColor(0.0f, 1.0f, 0.0f));
+					
 						if (RotationCount >= 2 )
 						{
 
@@ -277,8 +274,6 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 				GetCharacterMovement()->JumpZVelocity = RandomZVelocity;
 				Jump();
 				}
-
-
 			}
 	}
 	else
