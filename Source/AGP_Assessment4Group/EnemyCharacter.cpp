@@ -26,14 +26,11 @@ AEnemyCharacter::AEnemyCharacter()
 	BloodSplatterCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Blood Splatter Collision"));
 	BloodSplatterCollision->SetupAttachment(RootComponent);
 
-	// Create the point light component and attach it to the root
+
 	PointLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight"));
 	PointLight->SetupAttachment(RootComponent);
+	PointLight->Intensity = 1000.0f;
 
-	// Set properties of the light
-	PointLight->Intensity = 1000.0f; // Adjust as needed
-	//PointLight->bVisible = true;     // Set to false if you want to start with the light off
-	// You can set other properties like light color, attenuation radius, etc.
 	
 }
 
@@ -183,6 +180,7 @@ ERotationState RotationState = ERotationState::Idle;
 void AEnemyCharacter::RotateSearch_Implementation()																						//This function handles the rotation interpolation and either calls itself again or passes to RandomPatrol()
 {
 	PointLight->SetLightColor(FLinearColor(0.0f, 1.0f, 0.0f));
+	GetCharacterMovement()->MaxWalkSpeed =250;
 if(HasAuthority())
 {
 	if (RotationState == ERotationState::Idle)
@@ -259,6 +257,7 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 			EnemyHasLOS=true;
 			LastSeenLocation = PlayerCharacter->GetActorLocation();
 			PointLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f));
+			GetCharacterMovement()->MaxWalkSpeed =400;
 			EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
 
 			DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
