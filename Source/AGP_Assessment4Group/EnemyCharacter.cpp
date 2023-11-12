@@ -263,9 +263,11 @@ void AEnemyCharacter::LineOfSightLineTrace_Implementation()																				/
 			LastSeenLocation = PlayerCharacter->GetActorLocation();
 			PointLight->SetLightColor(FLinearColor(1.0f, 0.0f, 0.0f));
 			GetCharacterMovement()->MaxWalkSpeed =400;
+			
 			EnemyAIController->MoveToLocation( LastSeenLocation, StoppingDistance, false);
 
 			DrawDebugLine(GetWorld(),StartLocation,EndLocation,RandomColor,false,0.20,0,0.25);
+
 			const float Distance = FVector::Distance(StartLocation, EndLocation);
 
 			if(Distance<150.0f&&Distance>140.0f)																				//Threshold for distance to player for enemy to jump
